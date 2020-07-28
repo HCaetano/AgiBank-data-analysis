@@ -58,10 +58,13 @@ public class Main {
             switch (reportIndicator) {
                 case 1:
                     report.add("Number of clients: " + numberOfCustomers);
+                    break;
                 case 2:
                     report.add("Number of salespeople: " + numberOfSalespeople);
+                    break;
                 case 3:
                     report.add("Biggest sale ID: " + biggestSaleId);
+                    break;
                 case 4:
                     report.add("Salesperson with lowest ranking sale : " + lowestRankingSalesperson);
             }
