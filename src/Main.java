@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -13,11 +15,12 @@ public class Main {
         final ArrayList<String> report = new ArrayList<>();
         Integer numberOfCustomers = 0;
         Integer numberOfSalespeople = 0;
-        Integer biggestSaleId = 0;
+        String biggestSaleId = "";
         Integer lowestRankingSalesperson = 0;
         String reportNumberPath = System.getProperty("user.dir") + "/src/resources/reportNumber.dat";
         String reportNumber = "1";
         File data = null;
+        Double biggestSale = 0.0;
         
         try {
             data = new File(System.getProperty("user.home") + "/data/in/file1.dat");
@@ -46,6 +49,34 @@ public class Main {
                 numberOfSalespeople++;
             } else if (line.substring(0, 3).equals("002")) {
                 numberOfCustomers++;
+            }
+            else if (line.substring(0, 3).equals("003")) {
+                Integer commaCounter = line.replaceAll("[^,]","").length();
+                String processedLine = line.split("\\[")[1];
+                processedLine = processedLine.split("\\]")[0];
+                Double itemsValue = 0.0;
+
+                if (commaCounter > 0) {
+                    List<String> sales = Arrays.asList(processedLine.split(","));
+
+                    for (String sale : sales) {
+                        List<String> items = Arrays.asList(sale.split("-"));
+                        itemsValue += Integer.parseInt(items.get(1)) * Double.parseDouble(items.get(2));
+                    }
+
+                    if (itemsValue > biggestSale) {
+                        biggestSale = itemsValue;
+                        biggestSaleId = line.split("ç")[1];
+                    }
+                } else {
+                    List<String> items = Arrays.asList(processedLine.split("-"));
+                    itemsValue += Integer.parseInt(items.get(1)) * Double.parseDouble(items.get(2));
+
+                    if (itemsValue > biggestSale) {
+                        biggestSale = itemsValue;
+                        biggestSaleId = line.split("ç")[1];
+                    }
+                }
             }
         }
 
