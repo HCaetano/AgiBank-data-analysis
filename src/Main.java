@@ -16,12 +16,13 @@ public class Main {
         Integer numberOfCustomers = 0;
         Integer numberOfSalespeople = 0;
         String biggestSaleId = "";
-        Integer lowestRankingSalesperson = 0;
+        String lowestRankingSalesperson = "";
         String reportNumberPath = System.getProperty("user.dir") + "/src/resources/reportNumber.dat";
         String reportNumber = "1";
         File data = null;
         Double biggestSale = 0.0;
-        
+        Double smallestSale = Double.MAX_VALUE;
+
         try {
             data = new File(System.getProperty("user.home") + "/data/in/file1.dat");
             Scanner scanner = new Scanner(data);
@@ -68,6 +69,11 @@ public class Main {
                         biggestSale = itemsValue;
                         biggestSaleId = line.split("ç")[1];
                     }
+
+                    if (itemsValue < smallestSale) {
+                        smallestSale = itemsValue;
+                        lowestRankingSalesperson = line.split("ç")[3];
+                    }
                 } else {
                     List<String> items = Arrays.asList(processedLine.split("-"));
                     itemsValue += Integer.parseInt(items.get(1)) * Double.parseDouble(items.get(2));
@@ -75,6 +81,11 @@ public class Main {
                     if (itemsValue > biggestSale) {
                         biggestSale = itemsValue;
                         biggestSaleId = line.split("ç")[1];
+                    }
+
+                    if (itemsValue < smallestSale) {
+                        smallestSale = itemsValue;
+                        lowestRankingSalesperson = line.split("ç")[3];
                     }
                 }
             }
@@ -87,17 +98,17 @@ public class Main {
 
         for (int reportIndicator = 0; reportIndicator < 4; reportIndicator++) {
             switch (reportIndicator) {
-                case 1:
+                case 0:
                     report.add("Number of clients: " + numberOfCustomers);
                     break;
-                case 2:
+                case 1:
                     report.add("Number of salespeople: " + numberOfSalespeople);
                     break;
-                case 3:
+                case 2:
                     report.add("Biggest sale ID: " + biggestSaleId);
                     break;
-                case 4:
-                    report.add("Salesperson with lowest ranking sale : " + lowestRankingSalesperson);
+                case 3:
+                    report.add("Salesperson with lowest ranking sale: " + lowestRankingSalesperson);
             }
         }
 
