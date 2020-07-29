@@ -16,14 +16,13 @@ public class Main {
     public static void main(String[] args) {
         final ArrayList<String> fileContents = new ArrayList<>();
         final ArrayList<String> report = new ArrayList<>();
-        Integer numberOfSalespeople = 0;
-        String biggestSaleId = "";
-        String lowestRankingSalesperson = "";
         String reportNumberPath = System.getProperty("user.dir") + "/src/resources/reportNumber.dat";
         String reportNumber = "1";
         File data = null;
         Double biggestSale = 0.0;
         Double smallestSale = Double.MAX_VALUE;
+        String biggestSaleId = "";
+        Salesperson lowestRankingSalesperson = new Salesperson();
         ArrayList<Customer> customers = new ArrayList<>();;
         ArrayList<Salesperson> salespeople = new ArrayList<>();;
 
@@ -52,11 +51,6 @@ public class Main {
         for (String line : fileContents) {
             if (line.substring(0, 3).equals("001")) {
                 Salesperson salesperson = new Salesperson();
-//                System.out.println(line.split("ç")[1]);
-//                System.out.println(line.split("ç")[2]);
-//                System.out.println(line.split("ç")[3]);
-//                System.out.println(line.split("ç")[1]);
-
                 salesperson.setCpf(line.split("ç")[1]);
                 salesperson.setName(line.split("ç")[2]);
                 salesperson.setSalary(Double.parseDouble(line.split("ç")[3]));
@@ -89,7 +83,13 @@ public class Main {
 
                     if (itemsValue < smallestSale) {
                         smallestSale = itemsValue;
-                        lowestRankingSalesperson = line.split("ç")[3];
+//                        lowestRankingSalesperson = line.split("ç")[3];
+//                        lowestRankingSalesperson = salespeople.getN .split("ç")[3];
+
+                        lowestRankingSalesperson = salespeople.stream()
+                                .filter(salesperson -> line.split("ç")[3].equals(salesperson.getName()))
+                                .findAny()
+                                .orElse(null);
                     }
                 } else {
                     List<String> items = Arrays.asList(processedLine.split("-"));
@@ -102,7 +102,10 @@ public class Main {
 
                     if (itemsValue < smallestSale) {
                         smallestSale = itemsValue;
-                        lowestRankingSalesperson = line.split("ç")[3];
+                        lowestRankingSalesperson = salespeople.stream()
+                                .filter(salesperson -> line.split("ç")[3].equals(salesperson.getName()))
+                                .findAny()
+                                .orElse(null);
                     }
                 }
             }
@@ -125,7 +128,7 @@ public class Main {
                     report.add("Biggest sale ID: " + biggestSaleId);
                     break;
                 case 3:
-                    report.add("Salesperson with lowest ranking sale: " + lowestRankingSalesperson);
+                    report.add("Salesperson with lowest ranking sale: " + lowestRankingSalesperson.getName());
             }
         }
 
