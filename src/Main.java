@@ -1,4 +1,6 @@
 import Entity.Customer;
+import Entity.Item;
+import Entity.Sale;
 import Entity.Salesperson;
 
 import java.io.*;
@@ -23,6 +25,7 @@ public class Main {
         Salesperson lowestRankingSalesperson = new Salesperson();
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<Salesperson> salespeople = new ArrayList<>();
+        ArrayList<Sale> sales = new ArrayList<>();
 
         try {
             data = new File(System.getProperty("user.home") + "/data/in/file1.dat");
@@ -64,25 +67,39 @@ public class Main {
                     break;
                 case "003":
                     int commaCounter = line.replaceAll("[^,]", "").length();
+                    double saleValue = 0.0;
+                    Sale sale = new Sale();
+                    ArrayList<Item> items = new ArrayList<>();
+
                     String processedLine = line.split("\\[")[1];
                     processedLine = processedLine.split("\\]")[0];
-                    double saleValue = 0.0;
+                    sale.setId(line.split("ç")[1]);
 
                     if (commaCounter > 0) {
-                        String[] items = processedLine.split(",");
+                        String[] itemsContent = processedLine.split(",");
 
-                        for (String itemContent : items) {
+                        for (String itemContent : itemsContent) {
                             String itemsInfo[] = itemContent.split("-");
-                            saleValue += Integer.parseInt(itemsInfo[1]) * Double.parseDouble(itemsInfo[2]);
+                            Item item = new Item();
+
+                            item.setId(Integer.parseInt(itemsInfo[0]));
+                            item.setQuantity(Integer.parseInt(itemsInfo[1]));
+                            item.setPrice(Double.parseDouble(itemsInfo[2]));
+                            items.add(item);
+
+                            saleValue += item.getQuantity() * item.getPrice();
                         }
 
-                        if (saleValue > biggestSale) {
-                            biggestSale = saleValue;
-                            biggestSaleId = line.split("ç")[1];
+                        sale.setValue(saleValue);
+                        sale.setItems(items);
+
+                        if (sale.getValue() > biggestSale) {
+                            biggestSale = sale.getValue();
+                            biggestSaleId = sale.getId();
                         }
 
-                        if (saleValue < smallestSale) {
-                            smallestSale = saleValue;
+                        if (sale.getValue() < smallestSale) {
+                            smallestSale = sale.getValue();
                             lowestRankingSalesperson = salespeople.stream()
                                     .filter(person -> line.split("ç")[3].equals(person.getName()))
                                     .findAny()
@@ -90,15 +107,23 @@ public class Main {
                         }
                     } else {
                         String itemsInfo[] = processedLine.split("-");
-                        saleValue += Integer.parseInt(itemsInfo[1]) * Double.parseDouble(itemsInfo[2]);
+                        Item item = new Item();
 
-                        if (saleValue > biggestSale) {
-                            biggestSale = saleValue;
-                            biggestSaleId = line.split("ç")[1];
+                        item.setId(Integer.parseInt(itemsInfo[0]));
+                        item.setQuantity(Integer.parseInt(itemsInfo[1]));
+                        item.setPrice(Double.parseDouble(itemsInfo[2]));
+                        items.add(item);
+
+                        sale.setValue(item.getQuantity() * item.getPrice());
+                        sale.setItems(items);
+
+                        if (sale.getValue() > biggestSale) {
+                            biggestSale = sale.getValue();
+                            biggestSaleId = sale.getId();
                         }
 
-                        if (saleValue < smallestSale) {
-                            smallestSale = saleValue;
+                        if (sale.getValue() < smallestSale) {
+                            smallestSale = sale.getValue();
                             lowestRankingSalesperson = salespeople.stream()
                                     .filter(person -> line.split("ç")[3].equals(person.getName()))
                                     .findAny()
