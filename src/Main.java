@@ -1,3 +1,6 @@
+import Entity.Customer;
+import Entity.Salesperson;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -13,7 +16,6 @@ public class Main {
     public static void main(String[] args) {
         final ArrayList<String> fileContents = new ArrayList<>();
         final ArrayList<String> report = new ArrayList<>();
-        Integer numberOfCustomers = 0;
         Integer numberOfSalespeople = 0;
         String biggestSaleId = "";
         String lowestRankingSalesperson = "";
@@ -22,6 +24,8 @@ public class Main {
         File data = null;
         Double biggestSale = 0.0;
         Double smallestSale = Double.MAX_VALUE;
+        ArrayList<Customer> customers = new ArrayList<>();;
+        ArrayList<Salesperson> salespeople = new ArrayList<>();;
 
         try {
             data = new File(System.getProperty("user.home") + "/data/in/file1.dat");
@@ -47,9 +51,22 @@ public class Main {
 
         for (String line : fileContents) {
             if (line.substring(0, 3).equals("001")) {
-                numberOfSalespeople++;
+                Salesperson salesperson = new Salesperson();
+//                System.out.println(line.split("ç")[1]);
+//                System.out.println(line.split("ç")[2]);
+//                System.out.println(line.split("ç")[3]);
+//                System.out.println(line.split("ç")[1]);
+
+                salesperson.setCpf(line.split("ç")[1]);
+                salesperson.setName(line.split("ç")[2]);
+                salesperson.setSalary(Double.parseDouble(line.split("ç")[3]));
+                salespeople.add(salesperson);
             } else if (line.substring(0, 3).equals("002")) {
-                numberOfCustomers++;
+                Customer customer = new Customer();
+                customer.setCnpj(line.split("ç")[1]);
+                customer.setName(line.split("ç")[2]);
+                customer.setField(line.split("ç")[3]);
+                customers.add(customer);
             }
             else if (line.substring(0, 3).equals("003")) {
                 Integer commaCounter = line.replaceAll("[^,]","").length();
@@ -99,10 +116,10 @@ public class Main {
         for (int reportIndicator = 0; reportIndicator < 4; reportIndicator++) {
             switch (reportIndicator) {
                 case 0:
-                    report.add("Number of clients: " + numberOfCustomers);
+                    report.add("Number of customers: " + customers.size());
                     break;
                 case 1:
-                    report.add("Number of salespeople: " + numberOfSalespeople);
+                    report.add("Number of salespeople: " + salespeople.size());
                     break;
                 case 2:
                     report.add("Biggest sale ID: " + biggestSaleId);
