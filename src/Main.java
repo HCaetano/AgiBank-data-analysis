@@ -43,7 +43,7 @@ public class Main {
                     Boolean multipleItems = line.replaceAll("[^,]", "").length() > 0;
                     double saleValue;
                     Sale sale = new Sale();
-                    ArrayList<Item> items = new ArrayList<>();
+                    ArrayList<Item> items;
 
                     String processedLine = line.split("\\[")[1];
                     processedLine = processedLine.split("\\]")[0];
@@ -51,21 +51,15 @@ public class Main {
 
                     if (multipleItems) {
                         items = analyst.processMultipleItems(processedLine);
-                        saleValue = analyst.processSaleValue(items);
-
-                        sale.setValue(saleValue);
-                        sale.setItems(items);
-                        report.checkBiggestSale(sale);
-                        report.checkSmallestSale(sale, salespeople, line);
                     } else {
                         items = analyst.processSingleItem(processedLine);
-                        saleValue = analyst.processSaleValue(items);
-
-                        sale.setValue(saleValue);
-                        sale.setItems(items);
-                        report.checkBiggestSale(sale);
-                        report.checkSmallestSale(sale, salespeople, line);
                     }
+
+                    saleValue = analyst.processSaleValue(items);
+                    sale.setValue(saleValue);
+                    sale.setItems(items);
+                    report.checkBiggestSale(sale);
+                    report.checkSmallestSale(sale, salespeople, line);
                     break;
             }
         }
