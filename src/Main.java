@@ -1,25 +1,16 @@
+import Entity.*;
 import IO.Reader;
-import Entity.Customer;
-import Entity.Item;
-import Entity.Sale;
-import Entity.Salesperson;
 import IO.Writer;
-
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
         ArrayList<String> fileContents = new ArrayList<>();
-        ArrayList<String> report = new ArrayList<>();
+        Report report;
         String reportNumberPath = System.getProperty("user.dir") + "/src/resources/reportNumber.dat";
         String inputFilePath = System.getProperty("user.home") + "/data/in/file1.dat";
-        double smallestSale = Double.MAX_VALUE;
         String reportNumber;
+        double smallestSale = Double.MAX_VALUE;
         double biggestSale = 0.0;
         String biggestSaleId = "";
         Salesperson lowestRankingSalesperson = new Salesperson();
@@ -29,7 +20,6 @@ public class Main {
         Writer writer = new Writer();
 
         fileContents = reader.getContentFromFile(inputFilePath, fileContents);
-
         reportNumber = reader.getContentFromFile(reportNumberPath);
         Integer updatedReportNumber = Integer.parseInt(reportNumber);
         updatedReportNumber++;
@@ -120,8 +110,10 @@ public class Main {
             }
         }
 
+        report = new Report(customers.size(), salespeople.size(), biggestSaleId, lowestRankingSalesperson.getName(), reportNumber);
+
         writer.writeReportNumber(reportNumber, reportNumberPath);
-        writer.writeReport(reportNumber, report, customers.size(), salespeople.size(), biggestSaleId, lowestRankingSalesperson.getName());
+        writer.writeReport(reportNumber, report);
     }
 }
 
