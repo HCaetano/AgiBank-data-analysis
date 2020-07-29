@@ -8,8 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -23,8 +21,8 @@ public class Main {
         double smallestSale = Double.MAX_VALUE;
         String biggestSaleId = "";
         Salesperson lowestRankingSalesperson = new Salesperson();
-        ArrayList<Customer> customers = new ArrayList<>();;
-        ArrayList<Salesperson> salespeople = new ArrayList<>();;
+        ArrayList<Customer> customers = new ArrayList<>();
+        ArrayList<Salesperson> salespeople = new ArrayList<>();
 
         try {
             data = new File(System.getProperty("user.home") + "/data/in/file1.dat");
@@ -68,39 +66,39 @@ public class Main {
                     int commaCounter = line.replaceAll("[^,]", "").length();
                     String processedLine = line.split("\\[")[1];
                     processedLine = processedLine.split("\\]")[0];
-                    double itemsValue = 0.0;
+                    double saleValue = 0.0;
 
                     if (commaCounter > 0) {
-                        String[] sales = processedLine.split(",");
+                        String[] items = processedLine.split(",");
 
-                        for (String sale : sales) {
-                            String items[] = sale.split("-");
-                            itemsValue += Integer.parseInt(items[1]) * Double.parseDouble(items[2]);
+                        for (String itemContent : items) {
+                            String itemsInfo[] = itemContent.split("-");
+                            saleValue += Integer.parseInt(itemsInfo[1]) * Double.parseDouble(itemsInfo[2]);
                         }
 
-                        if (itemsValue > biggestSale) {
-                            biggestSale = itemsValue;
+                        if (saleValue > biggestSale) {
+                            biggestSale = saleValue;
                             biggestSaleId = line.split("ç")[1];
                         }
 
-                        if (itemsValue < smallestSale) {
-                            smallestSale = itemsValue;
+                        if (saleValue < smallestSale) {
+                            smallestSale = saleValue;
                             lowestRankingSalesperson = salespeople.stream()
                                     .filter(person -> line.split("ç")[3].equals(person.getName()))
                                     .findAny()
                                     .orElse(null);
                         }
                     } else {
-                        String items[] = processedLine.split("-");
-                        itemsValue += Integer.parseInt(items[1]) * Double.parseDouble(items[2]);
+                        String itemsInfo[] = processedLine.split("-");
+                        saleValue += Integer.parseInt(itemsInfo[1]) * Double.parseDouble(itemsInfo[2]);
 
-                        if (itemsValue > biggestSale) {
-                            biggestSale = itemsValue;
+                        if (saleValue > biggestSale) {
+                            biggestSale = saleValue;
                             biggestSaleId = line.split("ç")[1];
                         }
 
-                        if (itemsValue < smallestSale) {
-                            smallestSale = itemsValue;
+                        if (saleValue < smallestSale) {
+                            smallestSale = saleValue;
                             lowestRankingSalesperson = salespeople.stream()
                                     .filter(person -> line.split("ç")[3].equals(person.getName()))
                                     .findAny()
