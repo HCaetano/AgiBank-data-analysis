@@ -74,8 +74,8 @@ public class Main {
                         String[] sales = processedLine.split(",");
 
                         for (String sale : sales) {
-                            List<String> items = Arrays.asList(sale.split("-"));
-                            itemsValue += Integer.parseInt(items.get(1)) * Double.parseDouble(items.get(2));
+                            String items[] = sale.split("-");
+                            itemsValue += Integer.parseInt(items[1]) * Double.parseDouble(items[2]);
                         }
 
                         if (itemsValue > biggestSale) {
@@ -91,8 +91,8 @@ public class Main {
                                     .orElse(null);
                         }
                     } else {
-                        List<String> items = Arrays.asList(processedLine.split("-"));
-                        itemsValue += Integer.parseInt(items.get(1)) * Double.parseDouble(items.get(2));
+                        String items[] = processedLine.split("-");
+                        itemsValue += Integer.parseInt(items[1]) * Double.parseDouble(items[2]);
 
                         if (itemsValue > biggestSale) {
                             biggestSale = itemsValue;
