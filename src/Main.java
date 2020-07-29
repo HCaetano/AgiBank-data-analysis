@@ -1,22 +1,21 @@
-import Analysis.Reader;
+import IO.Reader;
 import Entity.Customer;
 import Entity.Item;
 import Entity.Sale;
 import Entity.Salesperson;
+import IO.Writer;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         ArrayList<String> fileContents = new ArrayList<>();
-        final ArrayList<String> report = new ArrayList<>();
+        ArrayList<String> report = new ArrayList<>();
         String reportNumberPath = System.getProperty("user.dir") + "/src/resources/reportNumber.dat";
         String inputFilePath = System.getProperty("user.home") + "/data/in/file1.dat";
         double smallestSale = Double.MAX_VALUE;
@@ -27,9 +26,14 @@ public class Main {
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<Salesperson> salespeople = new ArrayList<>();
         Reader reader = new Reader();
+        Writer writer = new Writer();
 
         fileContents = reader.getContentFromFile(inputFilePath, fileContents);
+
         reportNumber = reader.getContentFromFile(reportNumberPath);
+        Integer updatedReportNumber = Integer.parseInt(reportNumber);
+        updatedReportNumber++;
+        reportNumber = updatedReportNumber.toString();
 
         for (String line : fileContents) {
             switch (line.substring(0, 3)) {
@@ -116,44 +120,8 @@ public class Main {
             }
         }
 
-        int updatedReportNumber = Integer.parseInt(reportNumber);
-        updatedReportNumber++;
-        reportNumber = Integer.toString(updatedReportNumber);
-        report.add("*** Report " + reportNumber + " ***");
-
-        for (int reportIndicator = 0; reportIndicator < 4; reportIndicator++) {
-            switch (reportIndicator) {
-                case 0:
-                    report.add("Number of customers: " + customers.size());
-                    break;
-                case 1:
-                    report.add("Number of salespeople: " + salespeople.size());
-                    break;
-                case 2:
-                    report.add("Biggest sale ID: " + biggestSaleId);
-                    break;
-                case 3:
-                    report.add("Salesperson with lowest ranking sale: " + lowestRankingSalesperson.getName());
-            }
-        }
-
-        report.add("*** End report ***");
-        report.add("\n");
-
-        Path reportDestination = Paths.get(
-                System.getProperty("user.home") + "/data/out/report_" + reportNumber + ".done.dat"
-        );
-        Path reportNumberDestination = Paths.get(reportNumberPath);
-
-        try {
-            byte[] stringToBytes = reportNumber.getBytes();
-
-            Files.write(reportNumberDestination, stringToBytes);
-            String reportInOneString = String.join("\n", report);
-            Files.write(reportDestination, reportInOneString.getBytes(), StandardOpenOption.CREATE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writer.writeReportNumber(reportNumber, reportNumberPath);
+        writer.writeReport(reportNumber, report, customers.size(), salespeople.size(), biggestSaleId, lowestRankingSalesperson.getName());
     }
 }
 
