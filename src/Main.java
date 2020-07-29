@@ -1,3 +1,4 @@
+import Analysis.Analyst;
 import Entity.*;
 import IO.Reader;
 import IO.Writer;
@@ -14,6 +15,7 @@ public class Main {
         ArrayList<Salesperson> salespeople = new ArrayList<>();
         Reader reader = new Reader();
         Writer writer = new Writer();
+        Analyst analyst = new Analyst();
 
         fileContents = reader.getContentFromFile(inputFilePath, fileContents);
         reportNumber = reader.getContentFromFile(reportNumberPath);
@@ -38,8 +40,8 @@ public class Main {
                     customers.add(customer);
                     break;
                 case "003":
-                    int commaCounter = line.replaceAll("[^,]", "").length();
-                    double saleValue = 0.0;
+                    Boolean multipleItems = line.replaceAll("[^,]", "").length() > 0;
+                    double saleValue;
                     Sale sale = new Sale();
                     ArrayList<Item> items = new ArrayList<>();
 
@@ -47,35 +49,19 @@ public class Main {
                     processedLine = processedLine.split("\\]")[0];
                     sale.setId(line.split("ç")[1]);
 
-                    if (commaCounter > 0) {
-                        String[] itemsContent = processedLine.split(",");
-
-                        for (String itemContent : itemsContent) {
-                            String itemsInfo[] = itemContent.split("-");
-                            Item item = new Item();
-
-                            item.setId(Integer.parseInt(itemsInfo[0]));
-                            item.setQuantity(Integer.parseInt(itemsInfo[1]));
-                            item.setPrice(Double.parseDouble(itemsInfo[2]));
-                            items.add(item);
-
-                            saleValue += item.getQuantity() * item.getPrice();
-                        }
+                    if (multipleItems) {
+                        items = analyst.processMultipleItems(processedLine);
+                        saleValue = analyst.processSaleValue(items);
 
                         sale.setValue(saleValue);
                         sale.setItems(items);
                         report.checkBiggestSale(sale);
                         report.checkSmallestSale(sale, salespeople, line);
                     } else {
-                        String itemsInfo[] = processedLine.split("-");
-                        Item item = new Item();
+                        items = analyst.processSingleItem(processedLine);
+                        saleValue = analyst.processSaleValue(items);
 
-                        item.setId(Integer.parseInt(itemsInfo[0]));
-                        item.setQuantity(Integer.parseInt(itemsInfo[1]));
-                        item.setPrice(Double.parseDouble(itemsInfo[2]));
-                        items.add(item);
-
-                        sale.setValue(item.getQuantity() * item.getPrice());
+                        sale.setValue(saleValue);
                         sale.setItems(items);
                         report.checkBiggestSale(sale);
                         report.checkSmallestSale(sale, salespeople, line);
