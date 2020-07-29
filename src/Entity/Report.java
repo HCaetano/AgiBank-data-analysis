@@ -1,20 +1,48 @@
 package Entity;
 
+import java.util.ArrayList;
+
 public class Report {
 
     private Integer customerQuantity;
     private Integer salesPeopleQuantity;
     private String biggestSaleId;
-    private String lowestRankingSalespersonName;
+    private Salesperson lowestRankingSalesperson;
     private String reportNumber;
+    private Double biggestSale = 0.0;
+    private Double smallestSale = Double.MAX_VALUE;;
 
-    public Report(Integer customerQuantity, Integer salesPeopleQuantity, String biggestSaleId,
-                  String lowestRankingSalespersonName, String reportNumber) {
+    public Report() {
+
+    }
+
+    public void setCustomerQuantity(Integer customerQuantity) {
         this.customerQuantity = customerQuantity;
+    }
+
+    public void setSalesPeopleQuantity(Integer salesPeopleQuantity) {
         this.salesPeopleQuantity = salesPeopleQuantity;
-        this.biggestSaleId = biggestSaleId;
-        this.lowestRankingSalespersonName = lowestRankingSalespersonName;
+    }
+
+    public void setReportNumber(String reportNumber) {
         this.reportNumber = reportNumber;
+    }
+
+    public void checkBiggestSale(Sale sale) {
+        if (sale.getValue() > biggestSale) {
+            biggestSale = sale.getValue();
+            biggestSaleId = sale.getId();
+        }
+    }
+
+    public void checkSmallestSale(Sale sale, ArrayList<Salesperson> salespeople, String line) {
+        if (sale.getValue() < smallestSale) {
+            smallestSale = sale.getValue();
+            lowestRankingSalesperson = salespeople.stream()
+                    .filter(person -> line.split("ç")[3].equals(person.getName()))
+                    .findAny()
+                    .orElse(null);
+        }
     }
 
     @Override
@@ -23,7 +51,7 @@ public class Report {
                 "\nNumber of customers: " + customerQuantity +
                 "\nNumber of salespeople: " + salesPeopleQuantity +
                 "\nBiggest sale ID: " + biggestSaleId +
-                "\nSalesperson with lowest ranking sale: " + lowestRankingSalespersonName +
+                "\nSalesperson with lowest ranking sale: " + lowestRankingSalesperson.getName() +
                 "\n*** End report ***\n";
     }
 }
