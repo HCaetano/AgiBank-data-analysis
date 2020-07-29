@@ -1,3 +1,4 @@
+import Analysis.Reader;
 import Entity.Customer;
 import Entity.Item;
 import Entity.Sale;
@@ -14,40 +15,21 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        final ArrayList<String> fileContents = new ArrayList<>();
+        ArrayList<String> fileContents = new ArrayList<>();
         final ArrayList<String> report = new ArrayList<>();
         String reportNumberPath = System.getProperty("user.dir") + "/src/resources/reportNumber.dat";
-        String reportNumber = "1";
-        File data = null;
-        double biggestSale = 0.0;
+        String inputFilePath = System.getProperty("user.home") + "/data/in/file1.dat";
         double smallestSale = Double.MAX_VALUE;
+        String reportNumber;
+        double biggestSale = 0.0;
         String biggestSaleId = "";
         Salesperson lowestRankingSalesperson = new Salesperson();
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<Salesperson> salespeople = new ArrayList<>();
-        ArrayList<Sale> sales = new ArrayList<>();
+        Reader reader = new Reader();
 
-        try {
-            data = new File(System.getProperty("user.home") + "/data/in/file1.dat");
-            Scanner scanner = new Scanner(data);
-
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                fileContents.add(line);
-            }
-
-            File reportNumberInfo = new File(reportNumberPath);
-            scanner = new Scanner(reportNumberInfo);
-
-            while (scanner.hasNextLine()) {
-                reportNumber = scanner.nextLine();
-            }
-
-            scanner.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
-            e.printStackTrace();
-        }
+        fileContents = reader.getContentFromFile(inputFilePath, fileContents);
+        reportNumber = reader.getContentFromFile(reportNumberPath);
 
         for (String line : fileContents) {
             switch (line.substring(0, 3)) {
@@ -167,13 +149,8 @@ public class Main {
             byte[] stringToBytes = reportNumber.getBytes();
 
             Files.write(reportNumberDestination, stringToBytes);
-
-            if (data.length() == 0) {
-                Files.write(reportDestination, report, Charset.defaultCharset());
-            } else {
-                String reportInOneString = String.join("\n", report);
-                Files.write(reportDestination, reportInOneString.getBytes(), StandardOpenOption.CREATE);
-            }
+            String reportInOneString = String.join("\n", report);
+            Files.write(reportDestination, reportInOneString.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
             e.printStackTrace();
         }
