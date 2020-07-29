@@ -158,7 +158,9 @@ public class Main {
         report.add("*** End report ***");
         report.add("\n");
 
-        Path reportDestination = Paths.get(System.getProperty("user.home") + "/data/out/report.dat");
+        Path reportDestination = Paths.get(
+                System.getProperty("user.home") + "/data/out/report_" + reportNumber + ".done.dat"
+        );
         Path reportNumberDestination = Paths.get(reportNumberPath);
 
         try {
@@ -169,8 +171,8 @@ public class Main {
             if (data.length() == 0) {
                 Files.write(reportDestination, report, Charset.defaultCharset());
             } else {
-                String reportInOneString = String.join("\n", report );
-                Files.write(reportDestination, reportInOneString.getBytes(), StandardOpenOption.APPEND);
+                String reportInOneString = String.join("\n", report);
+                Files.write(reportDestination, reportInOneString.getBytes(), StandardOpenOption.CREATE);
             }
         } catch (IOException e) {
             e.printStackTrace();
