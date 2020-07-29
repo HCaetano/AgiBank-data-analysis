@@ -6,14 +6,10 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         ArrayList<String> fileContents = new ArrayList<>();
-        Report report;
+        Report report = new Report();
         String reportNumberPath = System.getProperty("user.dir") + "/src/resources/reportNumber.dat";
         String inputFilePath = System.getProperty("user.home") + "/data/in/file1.dat";
         String reportNumber;
-        double smallestSale = Double.MAX_VALUE;
-        double biggestSale = 0.0;
-        String biggestSaleId = "";
-        Salesperson lowestRankingSalesperson = new Salesperson();
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<Salesperson> salespeople = new ArrayList<>();
         Reader reader = new Reader();
@@ -68,19 +64,8 @@ public class Main {
 
                         sale.setValue(saleValue);
                         sale.setItems(items);
-
-                        if (sale.getValue() > biggestSale) {
-                            biggestSale = sale.getValue();
-                            biggestSaleId = sale.getId();
-                        }
-
-                        if (sale.getValue() < smallestSale) {
-                            smallestSale = sale.getValue();
-                            lowestRankingSalesperson = salespeople.stream()
-                                    .filter(person -> line.split("ç")[3].equals(person.getName()))
-                                    .findAny()
-                                    .orElse(null);
-                        }
+                        report.checkBiggestSale(sale);
+                        report.checkSmallestSale(sale, salespeople, line);
                     } else {
                         String itemsInfo[] = processedLine.split("-");
                         Item item = new Item();
@@ -92,25 +77,16 @@ public class Main {
 
                         sale.setValue(item.getQuantity() * item.getPrice());
                         sale.setItems(items);
-
-                        if (sale.getValue() > biggestSale) {
-                            biggestSale = sale.getValue();
-                            biggestSaleId = sale.getId();
-                        }
-
-                        if (sale.getValue() < smallestSale) {
-                            smallestSale = sale.getValue();
-                            lowestRankingSalesperson = salespeople.stream()
-                                    .filter(person -> line.split("ç")[3].equals(person.getName()))
-                                    .findAny()
-                                    .orElse(null);
-                        }
+                        report.checkBiggestSale(sale);
+                        report.checkSmallestSale(sale, salespeople, line);
                     }
                     break;
             }
         }
 
-        report = new Report(customers.size(), salespeople.size(), biggestSaleId, lowestRankingSalesperson.getName(), reportNumber);
+        report.setCustomerQuantity(customers.size());
+        report.setSalesPeopleQuantity(salespeople.size());
+        report.setReportNumber(reportNumber);
 
         writer.writeReportNumber(reportNumber, reportNumberPath);
         writer.writeReport(reportNumber, report);
