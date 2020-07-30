@@ -10,7 +10,7 @@ public class Report {
     private Salesperson lowestRankingSalesperson;
     private String reportNumber;
     private Double biggestSale = 0.0;
-    private Double smallestSale = Double.MAX_VALUE;;
+    private Double smallestSale = Double.MAX_VALUE;
 
     public Report() {
 

@@ -19,9 +19,9 @@ public class Main {
 
         fileContents = reader.getContentFromFile(inputFilePath, fileContents);
         reportNumber = reader.getContentFromFile(reportNumberPath);
-        Integer updatedReportNumber = Integer.parseInt(reportNumber);
+        int updatedReportNumber = Integer.parseInt(reportNumber);
         updatedReportNumber++;
-        reportNumber = updatedReportNumber.toString();
+        reportNumber = Integer.toString(updatedReportNumber);
 
         for (String line : fileContents) {
             switch (line.substring(0, 3)) {

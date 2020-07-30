@@ -10,7 +10,7 @@ public class Analyst {
     }
 
     public ArrayList<Item> processSaleItems(String saleLine) {
-        Boolean multipleItems = saleLine.replaceAll("[^,]", "").length() > 0;
+        boolean multipleItems = saleLine.replaceAll("[^,]", "").length() > 0;
         String processedLine = saleLine.split("\\[")[1];
         processedLine = processedLine.split("\\]")[0];
         ArrayList<Item> items;
@@ -29,7 +29,7 @@ public class Analyst {
         ArrayList<Item> items = new ArrayList<>();
 
         for (String itemContent : itemsContent) {
-            String itemsInfo[] = itemContent.split("-");
+            String[] itemsInfo = itemContent.split("-");
             Item item = new Item();
 
             item.setId(Integer.parseInt(itemsInfo[0]));
@@ -42,7 +42,7 @@ public class Analyst {
     }
 
     public ArrayList<Item> processSingleItem(String processedLine) {
-        String itemsInfo[] = processedLine.split("-");
+        String[] itemsInfo = processedLine.split("-");
         ArrayList<Item> items = new ArrayList<>();
         Item item = new Item();
 
