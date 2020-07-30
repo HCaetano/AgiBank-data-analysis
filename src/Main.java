@@ -27,6 +27,7 @@ public class Main {
             switch (line.substring(0, 3)) {
                 case "001":
                     Salesperson salesperson = new Salesperson();
+
                     salesperson.setCpf(line.split("ç")[1]);
                     salesperson.setName(line.split("ç")[2]);
                     salesperson.setSalary(Double.parseDouble(line.split("ç")[3]));
@@ -34,29 +35,18 @@ public class Main {
                     break;
                 case "002":
                     Customer customer = new Customer();
+
                     customer.setCnpj(line.split("ç")[1]);
                     customer.setName(line.split("ç")[2]);
                     customer.setField(line.split("ç")[3]);
                     customers.add(customer);
                     break;
                 case "003":
-                    Boolean multipleItems = line.replaceAll("[^,]", "").length() > 0;
-                    double saleValue;
+                    ArrayList<Item> items = analyst.processSaleItems(line);
                     Sale sale = new Sale();
-                    ArrayList<Item> items;
 
-                    String processedLine = line.split("\\[")[1];
-                    processedLine = processedLine.split("\\]")[0];
                     sale.setId(line.split("ç")[1]);
-
-                    if (multipleItems) {
-                        items = analyst.processMultipleItems(processedLine);
-                    } else {
-                        items = analyst.processSingleItem(processedLine);
-                    }
-
-                    saleValue = analyst.processSaleValue(items);
-                    sale.setValue(saleValue);
+                    sale.setValue(analyst.processSaleValue(items));
                     sale.setItems(items);
                     report.checkBiggestSale(sale);
                     report.checkSmallestSale(sale, salespeople, line);
