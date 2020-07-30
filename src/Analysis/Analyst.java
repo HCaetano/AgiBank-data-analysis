@@ -10,7 +10,7 @@ public class Analyst {
 
     }
 
-    public void processWholeLine(ArrayList<String> fileContents, ArrayList<Salesperson> salespeople,
+    public void processWholeFile(ArrayList<String> fileContents, ArrayList<Salesperson> salespeople,
                                  ArrayList<Customer> customers, Report report) {
         for (String line : fileContents) {
             switch (line.substring(0, 3)) {

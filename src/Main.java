@@ -18,7 +18,7 @@ public class Main {
         Analyst analyst = new Analyst();
 
         fileContents = reader.getContentFromFile(inputFilePath, fileContents);
-        analyst.processWholeLine(fileContents, salespeople, customers, report);
+        analyst.processWholeFile(fileContents, salespeople, customers, report);
 
         reportNumber = reader.getContentFromFile(reportNumberPath);
         reportNumber = analyst.increaseReportNumber(reportNumber);
