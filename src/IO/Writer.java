@@ -9,7 +9,7 @@ import java.nio.file.StandardOpenOption;
 
 public class Writer {
 
-    public Writer () {
+    public Writer() {
 
     }
 
