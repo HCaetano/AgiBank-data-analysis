@@ -28,6 +28,14 @@ public class Report {
         this.reportNumber = reportNumber;
     }
 
+    public Double getBiggestSale() {
+        return biggestSale;
+    }
+
+    public Double getSmallestSale() {
+        return smallestSale;
+    }
+
     public void checkBiggestSale(Sale sale) {
         if (sale.getValue() > biggestSale) {
             biggestSale = sale.getValue();
