@@ -18,41 +18,10 @@ public class Main {
         Analyst analyst = new Analyst();
 
         fileContents = reader.getContentFromFile(inputFilePath, fileContents);
+        analyst.processWholeLine(fileContents, salespeople, customers, report);
+
         reportNumber = reader.getContentFromFile(reportNumberPath);
-        int updatedReportNumber = Integer.parseInt(reportNumber);
-        updatedReportNumber++;
-        reportNumber = Integer.toString(updatedReportNumber);
-
-        for (String line : fileContents) {
-            switch (line.substring(0, 3)) {
-                case "001":
-                    Salesperson salesperson = new Salesperson();
-
-                    salesperson.setCpf(line.split("ç")[1]);
-                    salesperson.setName(line.split("ç")[2]);
-                    salesperson.setSalary(Double.parseDouble(line.split("ç")[3]));
-                    salespeople.add(salesperson);
-                    break;
-                case "002":
-                    Customer customer = new Customer();
-
-                    customer.setCnpj(line.split("ç")[1]);
-                    customer.setName(line.split("ç")[2]);
-                    customer.setField(line.split("ç")[3]);
-                    customers.add(customer);
-                    break;
-                case "003":
-                    ArrayList<Item> items = analyst.processSaleItems(line);
-                    Sale sale = new Sale();
-
-                    sale.setId(line.split("ç")[1]);
-                    sale.setValue(analyst.processSaleValue(items));
-                    sale.setItems(items);
-                    report.checkBiggestSale(sale);
-                    report.checkSmallestSale(sale, salespeople, line);
-                    break;
-            }
-        }
+        reportNumber = analyst.increaseReportNumber(reportNumber);
 
         report.setCustomerQuantity(customers.size());
         report.setSalesPeopleQuantity(salespeople.size());
