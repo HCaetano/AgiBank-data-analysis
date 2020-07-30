@@ -1,15 +1,27 @@
 package Analysis;
 
 import Entity.Item;
-import Entity.Report;
-import Entity.Sale;
-
 import java.util.ArrayList;
 
 public class Analyst {
 
     public Analyst() {
 
+    }
+
+    public ArrayList<Item> processSaleItems(String saleLine) {
+        Boolean multipleItems = saleLine.replaceAll("[^,]", "").length() > 0;
+        String processedLine = saleLine.split("\\[")[1];
+        processedLine = processedLine.split("\\]")[0];
+        ArrayList<Item> items;
+
+        if (multipleItems) {
+            items = this.processMultipleItems(processedLine);
+        } else {
+            items = this.processSingleItem(processedLine);
+        }
+
+        return items;
     }
 
     public ArrayList<Item> processMultipleItems(String processedLine) {
