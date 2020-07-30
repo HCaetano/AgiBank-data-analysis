@@ -1,12 +1,47 @@
 package Analysis;
 
-import Entity.Item;
+import Entity.*;
+
 import java.util.ArrayList;
 
 public class Analyst {
 
     public Analyst() {
 
+    }
+
+    public void processWholeLine(ArrayList<String> fileContents, ArrayList<Salesperson> salespeople,
+                                 ArrayList<Customer> customers, Report report) {
+        for (String line : fileContents) {
+            switch (line.substring(0, 3)) {
+                case "001":
+                    Salesperson salesperson = new Salesperson();
+
+                    salesperson.setCpf(line.split("ç")[1]);
+                    salesperson.setName(line.split("ç")[2]);
+                    salesperson.setSalary(Double.parseDouble(line.split("ç")[3]));
+                    salespeople.add(salesperson);
+                    break;
+                case "002":
+                    Customer customer = new Customer();
+
+                    customer.setCnpj(line.split("ç")[1]);
+                    customer.setName(line.split("ç")[2]);
+                    customer.setField(line.split("ç")[3]);
+                    customers.add(customer);
+                    break;
+                case "003":
+                    ArrayList<Item> items = this.processSaleItems(line);
+                    Sale sale = new Sale();
+
+                    sale.setId(line.split("ç")[1]);
+                    sale.setValue(this.processSaleValue(items));
+                    sale.setItems(items);
+                    report.checkBiggestSale(sale);
+                    report.checkSmallestSale(sale, salespeople, line);
+                    break;
+            }
+        }
     }
 
     public ArrayList<Item> processSaleItems(String saleLine) {
@@ -62,5 +97,12 @@ public class Analyst {
         }
 
         return saleValue;
+    }
+
+    public String increaseReportNumber(String reportNumber) {
+        int updatedReportNumber = Integer.parseInt(reportNumber);
+        updatedReportNumber++;
+
+        return Integer.toString(updatedReportNumber);
     }
 }
