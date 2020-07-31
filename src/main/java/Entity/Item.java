@@ -10,6 +10,16 @@ public class Item {
 
     }
 
+    public Item(Integer id, Integer quantity, Double price) {
+        this.id = id;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }

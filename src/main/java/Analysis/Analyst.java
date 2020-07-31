@@ -36,7 +36,6 @@ public class Analyst {
 
                     sale.setId(line.split("ç")[1]);
                     sale.setValue(this.processSaleValue(items));
-                    sale.setItems(items);
                     report.checkBiggestSale(sale);
                     report.checkSmallestSale(sale, salespeople, line);
                     break;
