@@ -24,6 +24,10 @@ public class Report {
         this.salesPeopleQuantity = salesPeopleQuantity;
     }
 
+    public Salesperson getLowestRankingSalesperson() {
+        return lowestRankingSalesperson;
+    }
+
     public void setReportNumber(String reportNumber) {
         this.reportNumber = reportNumber;
     }
