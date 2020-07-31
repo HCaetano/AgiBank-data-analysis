@@ -24,8 +24,20 @@ public class Report {
         this.salesPeopleQuantity = salesPeopleQuantity;
     }
 
+    public Salesperson getLowestRankingSalesperson() {
+        return lowestRankingSalesperson;
+    }
+
     public void setReportNumber(String reportNumber) {
         this.reportNumber = reportNumber;
+    }
+
+    public Double getBiggestSale() {
+        return biggestSale;
+    }
+
+    public Double getSmallestSale() {
+        return smallestSale;
     }
 
     public void checkBiggestSale(Sale sale) {

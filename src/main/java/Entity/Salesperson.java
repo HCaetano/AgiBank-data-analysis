@@ -10,6 +10,12 @@ public class Salesperson {
 
     }
 
+    public Salesperson(String name, String cpf, Double salary) {
+        this.name = name;
+        this.cpf = cpf;
+        this.salary = salary;
+    }
+
     public String getName() {
         return name;
     }
