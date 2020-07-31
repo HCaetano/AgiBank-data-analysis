@@ -25,7 +25,6 @@ public class Reader {
 
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
             e.printStackTrace();
         }
 
@@ -46,7 +45,6 @@ public class Reader {
 
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
             e.printStackTrace();
         }
 
