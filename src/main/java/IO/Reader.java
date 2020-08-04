@@ -1,5 +1,7 @@
 package IO;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -20,6 +22,11 @@ public class Reader {
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+
+                if (StringUtils.countMatches(line, "ç") < 3) {
+                    line = line + scanner.nextLine();
+                }
+
                 fileContents.add(line);
             }
 
